@@ -11,31 +11,30 @@ public class Program
 
     static void Main(string[] args)
     {
-        // ReadUsers();
+        var connection = new SqlConnection(CONNECTION_STRING);
+        connection.Open();
+
+        ReadUsers(connection);
         // ReadUser();
         // CreateUser();
         // DeleteUser();
+        connection.Close();
     }
 
-    public static void ReadUsers()
+    public static void ReadUsers(SqlConnection connection)
     {
-        var repository = new UserRepository();
+        var repository = new UserRepository(connection);
         var users = repository.GetAll();
 
         foreach (var user in users)
-        {
             Console.WriteLine(user.Name);
-        }
     }
 
-    public static void ReadUser()
+    public static void ReadUser(SqlConnection connection)
     {
-        using (var connection = new SqlConnection(CONNECTION_STRING))
-        {
-            var user = connection.Get<User>(1);
+        var user = connection.Get<User>(1);
 
-            Console.WriteLine(user.Name);
-        }
+        Console.WriteLine(user.Name);
     }
 
     public static void CreateUser()
